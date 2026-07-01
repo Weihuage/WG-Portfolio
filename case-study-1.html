@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amazon Leo Console — Wei G</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="chatbot.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="index.html" class="nav-logo">Wei G</a>
+      <ul class="nav-links">
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Case Study -->
+  <section class="case-study">
+    <div class="container">
+      <a href="index.html#projects" class="back-link">&larr; Back to projects</a>
+
+      <h1>Amazon Leo Console</h1>
+      <p class="meta">UX Design &middot; 2025–2026 &middot; Amazon Kuiper</p>
+
+      <div class="hero-image" style="background: linear-gradient(135deg, #e8f0fe 0%, #d0e2ff 100%);"></div>
+
+      <h2>Overview</h2>
+      <p>
+        The Amazon Leo Console is the primary interface for maritime and mobility customers to monitor and manage their satellite connectivity. I led the UX design for the dashboard, service contracts, fleet management, and antenna monitoring experiences.
+      </p>
+
+      <h2>Challenge</h2>
+      <p>
+        Customers needed to manage hundreds of active connections across vessels and vehicles in real-time. The existing workflow required navigating between multiple disconnected views, leading to slow troubleshooting and missed outages.
+      </p>
+
+      <h2>Approach</h2>
+      <ul>
+        <li>Conducted stakeholder interviews and mapped existing workflows</li>
+        <li>Created information architecture for a unified dashboard</li>
+        <li>Designed a map-based status view with color-coded markers</li>
+        <li>Iterated through 3 rounds of prototype testing with internal users</li>
+        <li>Built interactive prototypes in React for design reviews</li>
+      </ul>
+
+      <h2>Outcome</h2>
+      <p>
+        The redesigned console reduced average troubleshooting time from 12 minutes to under 3 minutes. The unified dashboard became the default landing page for all Leo customers.
+      </p>
+
+      <h2>Key Decisions</h2>
+      <ul>
+        <li>Map-first design: geographic context is critical for maritime/mobility customers</li>
+        <li>Status color system: green (online), red (offline), grey (paused/cancelled) — tested for color-blind accessibility</li>
+        <li>Progressive disclosure: summary cards at top, detailed table below, drill-down on click</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Wei G. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="chatbot.js" defer></script>
+</body>
+</html>

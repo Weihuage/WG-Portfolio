@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fleet Management Redesign — Wei G</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="chatbot.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container">
+      <a href="index.html" class="nav-logo">Wei G</a>
+      <ul class="nav-links">
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Case Study -->
+  <section class="case-study">
+    <div class="container">
+      <a href="index.html#projects" class="back-link">&larr; Back to projects</a>
+
+      <h1>Fleet Management Redesign</h1>
+      <p class="meta">Research &amp; Design &middot; 2026 &middot; Amazon Kuiper</p>
+
+      <div class="hero-image" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);"></div>
+
+      <h2>Overview</h2>
+      <p>
+        Fleet management allows customers to organize their vessels and vehicles into logical groups, assign service plans, and monitor connectivity at scale. The original design was a flat list that didn't scale beyond 20 assets.
+      </p>
+
+      <h2>Challenge</h2>
+      <p>
+        Enterprise customers with 100+ assets struggled to find specific vessels, couldn't bulk-assign configurations, and had no way to see fleet-wide health at a glance. Support tickets related to fleet management increased 3x quarter over quarter.
+      </p>
+
+      <h2>Approach</h2>
+      <ul>
+        <li>Analyzed support tickets to identify top pain points</li>
+        <li>Ran card-sorting sessions to understand customers' mental models for grouping</li>
+        <li>Designed a hierarchical fleet structure with folders and tags</li>
+        <li>Added bulk actions, inline status indicators, and a fleet health summary</li>
+        <li>Validated with 5 enterprise customers through moderated usability testing</li>
+      </ul>
+
+      <h2>Outcome</h2>
+      <p>
+        Task completion time for "assign a service plan to a group" dropped from 8 clicks to 3. Fleet-related support tickets decreased by 45% in the first month post-launch.
+      </p>
+
+      <h2>Key Decisions</h2>
+      <ul>
+        <li>Folder-based hierarchy over flat tags: matched how customers already think about their fleets</li>
+        <li>Inline editing: no modal dialogs for common actions like rename or move</li>
+        <li>Persistent filter bar: customers keep returning to the same subset of assets</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Wei G. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="chatbot.js" defer></script>
+</body>
+</html>
