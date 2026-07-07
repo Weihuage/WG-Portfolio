@@ -217,7 +217,76 @@ section {
 
 .contact p {
   color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.contact-form {
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.form-group {
   margin-bottom: var(--spacing-sm);
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--color-text);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 0.9375rem;
+  font-family: var(--font-sans);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(0, 87, 255, 0.12);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.contact-btn {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.contact-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.contact-status {
+  margin-top: 12px;
+  font-size: 0.875rem;
+  min-height: 1.4em;
+}
+
+.contact-status.success {
+  color: #16a34a;
+}
+
+.contact-status.error {
+  color: #dc2626;
 }
 
 /* ─── Footer ──────────────────────────────────────────────────────────────── */
