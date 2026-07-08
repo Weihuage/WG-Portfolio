@@ -4,8 +4,15 @@
   <meta charset="utf-8">
   <title>Portfolio Analytics</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 500px; margin: 60px auto; padding: 0 20px; }
+    body { font-family: system-ui, sans-serif; max-width: 600px; margin: 60px auto; padding: 0 20px; }
     h1 { font-size: 1.4rem; }
+    .total { font-size: 2rem; font-weight: 700; margin: 16px 0 32px; color: #0057ff; }
+    .chart { margin: 32px 0; }
+    .chart-bar-row { display: flex; align-items: center; margin-bottom: 10px; }
+    .chart-label { width: 120px; font-size: 0.85rem; color: #555; flex-shrink: 0; }
+    .chart-bar-bg { flex: 1; background: #f0f0f0; border-radius: 6px; height: 28px; overflow: hidden; }
+    .chart-bar { height: 100%; background: #0057ff; border-radius: 6px; transition: width 0.4s ease; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; min-width: 32px; }
+    .chart-bar span { font-size: 0.75rem; font-weight: 600; color: #fff; }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; }
     th, td { text-align: left; padding: 10px; border-bottom: 1px solid #ddd; }
     td:last-child, th:last-child { text-align: right; font-variant-numeric: tabular-nums; }
@@ -13,14 +20,38 @@
 </head>
 <body>
   <h1>📊 Page Views</h1>
+  <p class="total" id="total-views">—</p>
+
+  <div class="chart" id="chart"></div>
+
   <table id="stats">
     <thead><tr><th>Page</th><th>Views</th></tr></thead>
     <tbody></tbody>
   </table>
+
   <script>
     fetch("https://gyzau16ub8.execute-api.us-east-1.amazonaws.com/stats")
       .then(r => r.json())
       .then(rows => {
+        // Total views
+        const total = rows.reduce((sum, r) => sum + r.views, 0);
+        document.getElementById("total-views").textContent = total.toLocaleString() + " total views";
+
+        // Bar chart
+        const max = Math.max(...rows.map(r => r.views));
+        const chart = document.getElementById("chart");
+        chart.innerHTML = rows.map(r => {
+          const pct = Math.round((r.views / max) * 100);
+          return `
+            <div class="chart-bar-row">
+              <div class="chart-label">${r.pageId}</div>
+              <div class="chart-bar-bg">
+                <div class="chart-bar" style="width: ${pct}%"><span>${r.views.toLocaleString()}</span></div>
+              </div>
+            </div>`;
+        }).join("");
+
+        // Table
         const tbody = document.querySelector("#stats tbody");
         tbody.innerHTML = rows
           .map(r => `<tr><td>${r.pageId}</td><td>${r.views.toLocaleString()}</td></tr>`)
