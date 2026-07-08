@@ -23,6 +23,16 @@
   --spacing-xl: 96px;
 }
 
+[data-theme="dark"] {
+  --color-bg: #121212;
+  --color-surface: #1e1e1e;
+  --color-text: #e8e8e8;
+  --color-text-secondary: #aaa;
+  --color-accent: #4d8eff;
+  --color-accent-hover: #6da3ff;
+  --color-border: #333;
+}
+
 html {
   font-size: 16px;
   scroll-behavior: smooth;
@@ -100,6 +110,31 @@ section {
 .nav-links a:hover {
   color: var(--color-accent);
   text-decoration: none;
+}
+
+/* ─── Theme Toggle ────────────────────────────────────────────────────────── */
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  font-size: 1.125rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.theme-toggle:hover {
+  background: var(--color-bg);
+  border-color: var(--color-accent);
+}
+
+.theme-toggle:focus-visible {
+  outline: 3px solid rgba(0, 87, 255, 0.3);
+  outline-offset: 2px;
 }
 
 /* ─── Hero ────────────────────────────────────────────────────────────────── */
@@ -192,7 +227,7 @@ section {
 .project-card-body .tag {
   display: inline-block;
   font-size: 0.75rem;
-  background: #f0f0f0;
+  background: var(--color-border);
   color: var(--color-text-secondary);
   padding: 4px 10px;
   border-radius: 20px;
