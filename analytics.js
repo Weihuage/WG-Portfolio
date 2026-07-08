@@ -7,7 +7,7 @@
       ? "home"
       : path.replace(/^\/+|\/+$/g, "").replace(/\//g, "-"); // "/projects/" → "projects"
 
-  fetch("https://gyzau16ub8.execute-api.us-east-1.amazonaws.com/prod/track", {
+  fetch("https://gyzau16ub8.execute-api.us-east-1.amazonaws.com/track", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ pageId }),

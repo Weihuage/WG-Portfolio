@@ -18,7 +18,7 @@
     <tbody></tbody>
   </table>
   <script>
-    fetch("https://gyzau16ub8.execute-api.us-east-1.amazonaws.com/prod/stats")
+    fetch("https://gyzau16ub8.execute-api.us-east-1.amazonaws.com/stats")
       .then(r => r.json())
       .then(rows => {
         const tbody = document.querySelector("#stats tbody");
