@@ -1,0 +1,132 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Portfolio infrastructure — analytics stack
+
+Resources:
+  AnalyticsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: portfolio-analytics
+      BillingMode: PAY_PER_REQUEST        # on-demand — matches what you clicked
+      AttributeDefinitions:
+        - AttributeName: pageId
+          AttributeType: S                # S = String
+      KeySchema:
+        - AttributeName: pageId
+          KeyType: HASH                   # HASH = partition key
+
+  # ── IAM role the Lambda runs as ──
+  AnalyticsFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole   # CloudWatch logs
+      Policies:
+        - PolicyName: AnalyticsDynamoAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:UpdateItem
+                  - dynamodb:Scan
+                Resource: !GetAtt AnalyticsTable.Arn
+
+  # ── The analytics Lambda ──
+  AnalyticsFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: portfolio-analytics-tracker
+      Runtime: python3.12
+      Handler: index.lambda_handler
+      Role: !GetAtt AnalyticsFunctionRole.Arn
+      Code:
+        ZipFile: |
+          import json
+          import boto3
+
+          dynamodb = boto3.resource("dynamodb")
+          table = dynamodb.Table("portfolio-analytics")
+
+          def lambda_handler(event, context):
+              body = json.loads(event.get("body") or "{}")
+              page_id = body.get("pageId", "home")
+
+              result = table.update_item(
+                  Key={"pageId": page_id},
+                  UpdateExpression="ADD #v :inc",
+                  ExpressionAttributeNames={"#v": "views"},
+                  ExpressionAttributeValues={":inc": 1},
+                  ReturnValues="UPDATED_NEW",
+              )
+
+              new_count = int(result["Attributes"]["views"])
+
+              return {
+                  "statusCode": 200,
+                  "headers": {"Access-Control-Allow-Origin": "*"},
+                  "body": json.dumps({"pageId": page_id, "views": new_count}),
+              }
+
+  # ── HTTP API ──
+  AnalyticsApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: portfolio-analytics-api
+      ProtocolType: HTTP
+      CorsConfiguration:                    # ← CORS handled declaratively!
+        AllowOrigins:
+          - '*'
+        AllowMethods:
+          - POST
+          - OPTIONS
+        AllowHeaders:
+          - content-type
+
+  # ── Integration: connect the API to the Lambda ──
+  AnalyticsIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref AnalyticsApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt AnalyticsFunction.Arn
+      PayloadFormatVersion: '2.0'
+
+  # ── Route: POST /track → the integration ──
+  AnalyticsRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref AnalyticsApi
+      RouteKey: 'POST /track'
+      Target: !Sub 'integrations/${AnalyticsIntegration}'
+
+  # ── Stage: deploy the API to a URL ──
+  AnalyticsStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref AnalyticsApi
+      StageName: prod
+      AutoDeploy: true
+
+  # ── Permission: let API Gateway invoke the Lambda ──
+  AnalyticsInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref AnalyticsFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub 'arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${AnalyticsApi}/*/*/track'
+
+Outputs:
+  TableName:
+    Description: Name of the analytics table
+    Value: !Ref AnalyticsTable
+  ApiEndpoint:
+    Description: The /track endpoint URL
+    Value: !Sub 'https://${AnalyticsApi}.execute-api.${AWS::Region}.amazonaws.com/prod/track'
